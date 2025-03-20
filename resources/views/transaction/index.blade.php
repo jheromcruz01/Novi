@@ -32,6 +32,17 @@
             </div>
         </div>
         <div class="card-body">
+        <div class="filter-section row">
+                <div class="col-md-6">
+                    <label for="status-filter">Status:</label>
+                    <select id="status-filter" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+                </div>
+            </div>
+            <br>
             <table id="datatable" class="table" style="width: 100%; height: 100%">
                 <thead>
                 <tr>

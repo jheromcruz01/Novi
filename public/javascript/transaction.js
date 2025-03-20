@@ -61,6 +61,13 @@ var _transaction = {
             ],
             initComplete: function (settings, json) {
                 $("#datatable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+
+                // Apply Filters
+                $('#status-filter').on('change', function () {
+                    var status = $(this).val();
+                    var table = $('#datatable').DataTable();
+                    table.column(8).search(status).draw(); // Column 2 is for 'status'
+                });
         
                 // Calculate the total price and display it below the table
                 let totalPrice = 0;

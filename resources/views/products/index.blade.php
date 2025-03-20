@@ -52,6 +52,11 @@
                         <option value="Black">Black</option>
                         <option value="Blue">Blue</option>
                         <option value="Green">Green</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Yellow">Yellow</option>
+                        <option value="Grey">Grey</option>
+                        <option value="Pink">Pink</option>
+                        <option value="Purple">Purple</option>
                     </select>
                 </div>
             </div>
