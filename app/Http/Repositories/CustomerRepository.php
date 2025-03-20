@@ -5,7 +5,7 @@ namespace App\Http\Repositories;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ProductRepository
+class CustomerRepository
 {
     public function getData($table, $param = [], $subStr = "get", $chkexst_id = 0)
     {
@@ -15,18 +15,18 @@ class ProductRepository
             ->$subStr();
     }
 
-    public function getProducts()
+    public function getCustomers()
     {
-        return DB::table('products')
-            ->where('products.is_deleted',0)
+        return DB::table('customers')
+            ->where('customers.is_deleted', 0)
+            ->orderby('customers.customer_name', 'asc')
             ->get();
     }
 
-    public function chkduplicate($table, $param = [], $subStr = "get", $chkexst_id = 0)
+    public function chkduplicate($table, $param = [], $subStr = "get")
     {
         return DB::table($table)
             ->where($param)
-            ->where('id', '!=', $chkexst_id)
             ->$subStr();
     }
 
@@ -42,9 +42,9 @@ class ProductRepository
             ->update($data);
     }
 
-    public function getProductDetails($param = [])
+    public function getCustomersDetails($param = [])
     {
-        return DB::table('products')
+        return DB::table('customers')
             ->where($param)
             ->first();
     }

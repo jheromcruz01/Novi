@@ -45,7 +45,15 @@
           <a href="/products" class="nav-link {{ request()->is('products') ? 'active' : '' }}">
             <i class="nav-icon fas fa-boxes"></i>
             <p>
-              Products
+              Inventory
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/transactions" class="nav-link {{ request()->is('transactions') ? 'active' : '' }}">
+            <i class="nav-icon fa fa-money-bill"></i>
+            <p>
+              Transactions
             </p>
           </a>
         </li>

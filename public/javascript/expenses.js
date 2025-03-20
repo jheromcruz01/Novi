@@ -23,7 +23,11 @@ var _expenses = {
                 {
                     data: 'price',
                     name: 'price',
-                    "defaultContent": ""
+                    "defaultContent": "",
+                    render: function(data, type, row) {
+                        // Format the number with the peso sign and two decimal places
+                        return data ? '₱' + parseFloat(data).toLocaleString('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                    }
                 },
                 {
                     data: 'id',
@@ -43,6 +47,23 @@ var _expenses = {
             ],
             initComplete: function (settings, json) {
                 $("#datatable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+        
+                // Calculate the total price and display it below the table
+                let totalPrice = 0;
+                let table = this.api();
+                
+                table.rows().every(function() {
+                    let data = this.data();
+                    let price = parseFloat(data.price) || 0;
+                    totalPrice += price;  // Only summing the price
+                });
+        
+                // Format the total price with the peso sign
+                let formattedTotal = '₱' + totalPrice.toLocaleString('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+                // Add a new row under the table to display the total price
+                $('#datatable tfoot').remove(); // Remove any existing tfoot
+                $('#datatable').append('<tfoot><tr><td></td><td></td><td style="text-align: left;"><strong>Total Expenses: ' + formattedTotal + '</strong></td><td></td></tr></tfoot>');
             },
         });
 

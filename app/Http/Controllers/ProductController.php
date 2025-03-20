@@ -41,7 +41,8 @@ class ProductController extends Controller
             'size'      => $request->size,
             'status'    => $request->status,
             'miner'     => $request->miner,
-            'price'     => $request->price,
+            'mine_price'     => $request->mine_price,
+            'lock_price'     => $request->lock_price,
         ];
 
         // this will check the if the record exist
@@ -53,16 +54,24 @@ class ProductController extends Controller
         if(count($error) > 0){
             return response()->json(implode($error));
         }
+
+        // Handle image upload if a file is provided
+        if ($request->hasFile('image')) {
+            // Validate the image
+            $request->validate([
+                'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // 2MB Max
+            ]);
+
+            // Store the image and get the file path
+            $imagePath = $request->file('image')->store('products', 'public');
+            $products['image'] = $imagePath;  // Add image path to the data
+        }
+
         //execute saving query
         if ($request->id === NULL) {
             $this->productRepository->insertData('products', $products);
-        } else {
-            
-            $products += [
-                'customer_id'       => $request->customer_id,
-                'price'             => $request->price,
-                'date_of_payment'   => now(),
-            ];
+        } 
+        else {
             $this->productRepository->updateData('products', $products, ['id' => $request->id]);
         }
 

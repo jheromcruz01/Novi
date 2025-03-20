@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +29,7 @@ Route::middleware('guard:1')->group(function () {
     Route::get('/users/reset-password/{id}', [UserController::class, 'resetPassword']);
     Route::resource('/products', ProductController::class);
     Route::resource('/expenses', ExpensesController::class);
+    Route::resource('/customers', CustomerController::class);
+    Route::resource('/transactions', TransactionController::class);
+    Route::put('/transactions/order-status/{id}', [TransactionController::class, 'updateStatus']);
 });

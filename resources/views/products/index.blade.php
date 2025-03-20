@@ -32,16 +32,41 @@
             </div>
         </div>
         <div class="card-body">
+
+            <div class="filter-section row">
+                <div class="col-md-6">
+                    <label for="status-filter">Status:</label>
+                    <select id="status-filter" class="form-control">
+                        <option value="">All</option>
+                        <option value="Available">Available</option>
+                        <option value="Reserved">Reserved</option>
+                        <option value="Sold">Sold</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                <label for="color-filter">Color:</label>
+                    <select id="color-filter" class="form-control">
+                        <option value="">All</option>
+                        <!-- Add color options dynamically or statically -->
+                        <option value="Red">Red</option>
+                        <option value="Black">Black</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                    </select>
+                </div>
+            </div>
+            <br>
             <table id="datatable" class="table" style="width: 100%; height: 100%">
                 <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Item Code</th>
                     <th>Color</th>
                     <th>Size</th>
                     <th>Status</th>
+                    <th>Mine Price</th>
+                    <th>Lock Price</th>
                     <th>Miners</th>
-                    <th>Sold To</th>
-                    <th>Sold Price</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -65,8 +90,14 @@
 @endsection
 
 @section('modal-content')
-    <form id="form" class="p-2">
+    <form id="form" class="p-2" enctype="multipart/form-data">
         @csrf
+        <div class="form-group row" id="image_upload">
+            <label for="" class="col-sm-3 col-form-label">Product Image</label>
+            <div class="col-sm-9">
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            </div>
+        </div>
         <div class="form-group row">
             <label for="" class="col-sm-3 col-form-label">Item Code</label>
             <div class="col-sm-9">
@@ -102,31 +133,26 @@
             <div class="col-sm-9">
                 <select class="select2-primary" id="status" name="status" data-placeholder="Select Status" data-dropdown-css-class="select2-primary" style="width: 100%;" required>
                     <option value="Available">Available</option>
-                    <option value="Mine">Mine</option>
-                    <option value="Lock">Lock</option>
-                    <option value="Paid">Paid</option>
-                    <option value="Ship">Ship</option>
-                    <option value="Closed">Closed</option>
+                    <option value="Reserved">Reserved</option>
                 </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-3 col-form-label">Mine Price</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="mine_price" name="mine_price">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-3 col-form-label">Lock Price</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="lock_price" name="lock_price">
             </div>
         </div>
         <div class="form-group row">
             <label for="" class="col-sm-3 col-form-label">Miner</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="miner" name="miner">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="" class="col-sm-3 col-form-label">Sold to</label>
-            <div class="col-sm-9">
-                <select class="select2-primary" id="customer_id" name="customer_id" data-placeholder="Select Customer" data-dropdown-css-class="select2-primary" style="width: 100%;">
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="" class="col-sm-3 col-form-label">Sold Price</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="price" name="price">
             </div>
         </div>
 

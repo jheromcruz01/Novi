@@ -8,8 +8,20 @@ var _products = {
         
         $('#datatable').DataTable({
             ajax: '/products',
-            order: [[0, 'asc']],
+            order: [[1, 'asc']],
             columns: [
+                {
+                    data: 'image',
+                    name: 'image',
+                    render: function (data, type, row) {
+                        if (data) {
+                            var imageUrl = '/storage/' + data;
+                            return '<img src="' + imageUrl + '" width="120" height="120" alt="Product Image">';
+                        } else {
+                            return 'No Image';
+                        }
+                    }
+                },
                 {
                     data: 'item_code',
                     name: 'item_code',
@@ -33,11 +45,8 @@ var _products = {
                         if (type === 'display' || type === 'filter') {
                             let statusLabels = {
                                 'Available': '<span class="badge badge-success">Available</span>',
-                                'Mine': '<span class="badge badge-warning">Mine</span>',
-                                'Lock': '<span class="badge badge-secondary">Lock</span>',
-                                'Paid': '<span class="badge badge-primary">Paid</span>',
-                                'Ship': '<span class="badge badge-info">Ship</span>',
-                                'Closed': '<span class="badge badge-dark">Closed</span>'
+                                'Reserved': '<span class="badge badge-warning">Reserved</span>',
+                                'Sold': '<span class="badge badge-danger">Sold</span>',
                             };
                             return statusLabels[data] || '<span class="badge badge-light">Unknown</span>';
                         }
@@ -45,18 +54,26 @@ var _products = {
                     }
                 },
                 {
+                    data: 'mine_price',
+                    name: 'mine_price',
+                    "defaultContent": "",
+                    render: function(data, type, row) {
+                        // Format the number with the peso sign and two decimal places
+                        return data ? '₱' + parseFloat(data).toLocaleString('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                    }
+                },
+                {
+                    data: 'lock_price',
+                    name: 'lock_price',
+                    "defaultContent": "",
+                    render: function(data, type, row) {
+                        // Format the number with the peso sign and two decimal places
+                        return data ? '₱' + parseFloat(data).toLocaleString('en-US', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                    }
+                },
+                {
                     data: 'miner',
                     name: 'miner',
-                    "defaultContent": ""
-                },
-                {
-                    data: 'customer_name',
-                    name: 'customer_name',
-                    "defaultContent": ""
-                },
-                {
-                    data: 'price',
-                    name: 'price',
                     "defaultContent": ""
                 },
                 {
@@ -76,7 +93,21 @@ var _products = {
                 },
             ],
             initComplete: function (settings, json) {
+                // Wrap table
                 $("#datatable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+                
+                // Apply Filters
+                $('#status-filter').on('change', function () {
+                    var status = $(this).val();
+                    var table = $('#datatable').DataTable();
+                    table.column(4).search(status).draw(); // Column 2 is for 'status'
+                });
+        
+                $('#color-filter').on('change', function () {
+                    var color = $(this).val();
+                    var table = $('#datatable').DataTable();
+                    table.column(2).search(color).draw(); // Column 0 is for 'color'
+                });
             },
         });
 
@@ -110,6 +141,7 @@ var _products = {
                 },
             })
         })
+        
 
     }
 }
@@ -122,11 +154,13 @@ function userModal(id) {
         $('#form')[0].reset();
         $('#modal').modal('toggle');
         $('#id').val('').trigger('change');
-
+        $('#image_upload').show();
+        $('#size').val('').trigger('change');
     } 
     else {
 
         $("#modal-title").append('Edit Product');
+        $('#image_upload').hide();
         //this will request the details of the given id
         $.ajax({
             url: '/products/' + id,
@@ -135,6 +169,10 @@ function userModal(id) {
             success: function (response) {
                 console.log(response);
                 $.each(response, function (index, value) {
+                    console.log(response);
+                    if (index === 'image') {
+                        return;  // Skip processing for the image field
+                    }
                     let field = $("#" + index);
                     if (field.is("select")) {
                         field.val(value).trigger('change'); // Ensure select field is updated properly
@@ -180,6 +218,5 @@ function destroy(id) {
         }
     }); 
 }
-
 
 _products.init();

@@ -102,6 +102,8 @@
 <!-- Select2 -->
 <script src="{{asset('adminlte/plugins/select2/js/select2.full.min.js')}}"></script>
 <!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @yield('javascript')
 
 </body>

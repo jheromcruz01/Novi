@@ -4,34 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Repositories\UserRepository;
-use App\Services\GoogleSheetService;
+use App\Http\Repositories\HomeRepository;
 
 class HomeController extends Controller
 {
-    protected $userRepository;
-    protected $signature = 'import:google-sheet';
-    protected $description = 'Import data from Google Sheets to the database';
+    protected $homeRepository;
 
-    public function __construct(UserRepository $userRepository, GoogleSheetService $googleSheetService)
+    public function __construct(HomeRepository $homeRepository)
     {
-        $this->userRepository = $userRepository;
-        $this->googleSheetService = $googleSheetService;
+        $this->homeRepository = $homeRepository;
     }
 
     public function index(Request $request)
     {
-        $data = $this->googleSheetService->getSheetData();
 
-        if (empty($data)) {
-            $this->info('No data found.');
-            return;
-        }
+        $totalSales = $this->homeRepository->totalSales(); 
+        $totalExpenses = $this->homeRepository->totalExpenses(); 
+        $income = $totalSales - $totalExpenses;
 
-        dd($data);
+        // Pass the data to the view
+        $data['totalSales'] = $totalSales;
+        $data['totalExpenses'] = $totalExpenses;
+        $data['income'] = $income;
 
-        // $auth = $this->userRepository->getData('users', ['id' => Auth::id()], 'first');
-        // $data['resource'] = $auth->firstname . ' ' . $auth->lastname;
-        // return view('home.index', $data);
+        $auth = $this->homeRepository->getData('users', ['id' => Auth::id()], 'first');
+        $data['resource'] = $auth->firstname . ' ' . $auth->lastname;
+        return view('home.index', $data);
     }
 }

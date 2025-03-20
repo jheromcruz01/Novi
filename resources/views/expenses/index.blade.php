@@ -41,6 +41,12 @@
                     <th>Action</th>
                 </tr>
                 </thead>
+                <tbody>
+                    <!-- Data will be inserted here dynamically -->
+                </tbody>
+                <tfoot>
+                    <!-- Total price row will be appended here dynamically -->
+                </tfoot>
             </table>
         </div>
         <!-- /.card-body -->
